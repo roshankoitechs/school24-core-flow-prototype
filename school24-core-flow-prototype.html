@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
   <title>School24 Core Flow Prototype</title>
   <style>
     :root {
@@ -78,6 +79,24 @@
       margin-bottom: 18px;
     }
 
+    .topline.with-back {
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+    }
+
+    .back-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: #eef8f2;
+      color: var(--green-dark);
+      font-size: 20px;
+      font-weight: 900;
+      display: grid;
+      place-items: center;
+      line-height: 1;
+    }
+
     .brand {
       display: flex;
       gap: 10px;
@@ -151,11 +170,14 @@
       border: 1px solid var(--line);
       border-radius: 16px;
       padding: 12px;
+      transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
     }
 
     .student.active {
       border-color: var(--green);
       background: var(--mint);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(31, 122, 77, 0.12);
     }
 
     .avatar {
@@ -181,6 +203,33 @@
       gap: 10px;
     }
 
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stat {
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fbfdfb;
+      padding: 12px;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .stat strong {
+      color: var(--green-dark);
+      font-size: 17px;
+    }
+
     .tile, .panel, .line {
       border: 1px solid var(--line);
       background: var(--white);
@@ -191,12 +240,18 @@
       padding: 14px;
       text-align: left;
       min-height: 92px;
+      transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
     }
 
     .tile strong {
       display: block;
       margin-top: 10px;
       font-size: 15px;
+    }
+
+    .tile:hover, .student:hover {
+      border-color: #9dd4b2;
+      transform: translateY(-1px);
     }
 
     .panel {
@@ -207,6 +262,18 @@
     .panel.mint {
       background: var(--mint);
       border-color: #c9e9d7;
+    }
+
+    .context {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 4px;
+    }
+
+    .context .pill {
+      background: #f3faf6;
+      border: 1px solid #d8ede1;
     }
 
     .product {
@@ -229,6 +296,20 @@
         radial-gradient(circle at 42px 30px, #f08c43 0 11px, transparent 12px),
         linear-gradient(135deg, #dff3e6, #fff4d6);
       border: 1px solid #e8eedf;
+    }
+
+    .food-img.blue {
+      background:
+        radial-gradient(circle at 28px 22px, #b7e2ff 0 12px, transparent 13px),
+        radial-gradient(circle at 44px 34px, #73b7e8 0 10px, transparent 11px),
+        linear-gradient(135deg, #e5f5ff, #f4fbff);
+    }
+
+    .food-img.gold {
+      background:
+        radial-gradient(circle at 28px 22px, #ffd56a 0 12px, transparent 13px),
+        radial-gradient(circle at 45px 32px, #f7a344 0 10px, transparent 11px),
+        linear-gradient(135deg, #fff5d6, #eff9ea);
     }
 
     .tags {
@@ -287,6 +368,11 @@
       align-items: center;
     }
 
+    .line.highlight {
+      border-color: #b7ddc6;
+      background: #f3faf6;
+    }
+
     .bottom-nav {
       position: absolute;
       left: 0;
@@ -306,7 +392,31 @@
       font-weight: 700;
     }
 
-    .nav-btn.active { color: var(--green-dark); }
+    .nav-btn.active {
+      color: var(--green-dark);
+      background: linear-gradient(180deg, rgba(233, 246, 239, 0.35), rgba(233, 246, 239, 0));
+    }
+
+    .amount-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .amount {
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fbfdfb;
+      color: var(--green-dark);
+      font-weight: 900;
+    }
+
+    .amount.active {
+      border-color: var(--green);
+      background: var(--mint);
+    }
 
     .notes {
       display: grid;
@@ -412,176 +522,278 @@
 
   <script>
     (() => {
+    const students = {
+      hannah: {
+        id: "hannah",
+        name: "Hannah",
+        initial: "H",
+        school: "All Hallows'",
+        year: "Year 11B",
+        wallet: 42,
+        accountBalance: 85.5,
+        cartTotal: 14.5,
+        cutOff: "8:30am today",
+        date: "Friday, 3 July",
+        breakName: "1st Break",
+        nextEvent: "Glow Night",
+        activeOrder: "Chicken Wrap + Apple Juice",
+        orderNote: "Lunch order is scheduled for Friday, 1st Break.",
+        profileNote: "Gluten-free preference, energy drinks banned.",
+        limit: "Daily $15 - Break $8",
+        vouchers: 2,
+        menu: [
+          { name: "Chicken Wrap", price: 8.5, tags: ["Homemade", "Popular"], tone: "gold" },
+          { name: "Apple Juice", price: 3, tags: ["Gluten-free", "Cold"], tone: "blue" },
+          { name: "Banana Bread", price: 3, tags: ["Vegetarian", "New"], tone: "gold" }
+        ],
+        activity: [
+          ["Dad topped up", "+$20.00"],
+          ["Kiosk purchase", "-$9.50"],
+          ["Mum topped up", "+$30.00"]
+        ]
+      },
+      james: {
+        id: "james",
+        name: "James",
+        initial: "J",
+        school: "Brisbane Grammar",
+        year: "Year 9A",
+        wallet: 18.4,
+        accountBalance: 85.5,
+        cartTotal: 12.8,
+        cutOff: "9:00am day before",
+        date: "Monday, 6 July",
+        breakName: "Lunch",
+        nextEvent: "Science Fair Pack",
+        activeOrder: "Sushi Roll + Watermelon Cup",
+        orderNote: "No active lunch order yet. Monday ordering is still open.",
+        profileNote: "No allergy flags. Daily wallet cap is lower for school days.",
+        limit: "Daily $10 - Lunch $6",
+        vouchers: 1,
+        menu: [
+          { name: "Sushi Roll", price: 6.8, tags: ["Fresh", "Lunch"], tone: "blue" },
+          { name: "Watermelon Cup", price: 3.5, tags: ["Vegetarian", "Cold"], tone: "gold" },
+          { name: "Choc Muffin", price: 2.5, tags: ["Special", "Snack"], tone: "gold" }
+        ],
+        activity: [
+          ["Mum topped up", "+$10.00"],
+          ["POS lunch purchase", "-$6.20"],
+          ["Voucher applied", "+$2.00"]
+        ]
+      }
+    };
+
     const appState = {
-      student: "Hannah",
-      school: "All Hallows'",
-      wallet: "$42.00",
-      cartTotal: "$14.50"
+      studentId: "hannah",
+      view: "home",
+      history: [],
+      topupAmount: 20
     };
 
     const screenEl = document.getElementById("screen");
     const navButtons = Array.from(document.querySelectorAll(".nav-btn"));
 
+    function currentStudent() {
+      return students[appState.studentId];
+    }
+
+    function money(value) {
+      return `$${value.toFixed(2)}`;
+    }
+
     function top(title, subtitle) {
+      const student = currentStudent();
+      const back = appState.history.length
+        ? `<button class="back-btn" data-back aria-label="Go back">‹</button>`
+        : `<span></span>`;
       return `
-        <div class="topline">
+        <div class="topline with-back">
+          ${back}
           <div class="brand"><span class="mark">S24</span><span>School24</span></div>
-          <span class="pill">${appState.school}</span>
+          <span class="pill">${student.school}</span>
         </div>
         <h1>${title}</h1>
         <p class="sub">${subtitle}</p>
       `;
     }
 
+    function contextPills() {
+      const student = currentStudent();
+      return `
+        <div class="context">
+          <span class="pill">${student.name}</span>
+          <span class="pill">${student.year}</span>
+          <span class="pill">Cut-off ${student.cutOff}</span>
+        </div>
+      `;
+    }
+
+    function studentCards() {
+      return `
+        <div class="student-row">
+          ${Object.values(students).map((student) => `
+            <button class="student ${student.id === appState.studentId ? "active" : ""}" data-student="${student.id}">
+              <span class="avatar">${student.initial}</span>
+              <span><strong>${student.name}</strong><br><span class="sub">${student.school} - ${student.year}</span></span>
+              <span class="balance">${money(student.wallet)}</span>
+            </button>
+          `).join("")}
+        </div>
+      `;
+    }
+
     function home() {
+      const student = currentStudent();
       return `
         ${top("Good morning, Yuliia", "Choose a student, place an order, or top up a wallet.")}
-        <div class="student-row">
-          <button class="student active" data-student="Hannah" data-school="All Hallows'" data-wallet="$42.00">
-            <span class="avatar">H</span>
-            <span><strong>Hannah</strong><br><span class="sub">All Hallows' - Year 11B</span></span>
-            <span class="balance">$42.00</span>
-          </button>
-          <button class="student" data-student="James" data-school="Brisbane Grammar" data-wallet="$18.40">
-            <span class="avatar">J</span>
-            <span><strong>James</strong><br><span class="sub">Brisbane Grammar - Year 9A</span></span>
-            <span class="balance">$18.40</span>
-          </button>
+        ${studentCards()}
+        <div class="stat-grid">
+          <div class="stat"><span>Selected student</span><strong>${student.name}</strong></div>
+          <div class="stat"><span>Wallet</span><strong>${money(student.wallet)}</strong></div>
+          <div class="stat"><span>School</span><strong>${student.school}</strong></div>
+          <div class="stat"><span>Next cut-off</span><strong>${student.cutOff}</strong></div>
         </div>
-        <div class="grid">
-          <button class="tile" data-go="menu"><span class="pill">Today</span><strong>Order Canteen</strong><p class="sub">Cut-off 8:30am</p></button>
-          <button class="tile" data-go="wallet"><span class="pill">Wallet</span><strong>Top Up</strong><p class="sub">${appState.student}'s wallet</p></button>
-          <button class="tile" data-go="profile"><span class="pill">Profile</span><strong>Students</strong><p class="sub">Classes, ID card, bans</p></button>
-          <button class="tile" data-go="events"><span class="pill">School</span><strong>Events</strong><p class="sub">Glow Night orders open</p></button>
+        <div class="grid" style="margin-top: 14px;">
+          <button class="tile" data-go="menu"><span class="pill">${student.date}</span><strong>Order Canteen</strong><p class="sub">${student.breakName} menu for ${student.school}</p></button>
+          <button class="tile" data-go="wallet"><span class="pill">Wallet</span><strong>Top Up</strong><p class="sub">${student.name}'s wallet: ${money(student.wallet)}</p></button>
+          <button class="tile" data-go="profile"><span class="pill">Profile</span><strong>Student Details</strong><p class="sub">${student.year}, ID card and bans</p></button>
+          <button class="tile" data-go="events"><span class="pill">School</span><strong>${student.nextEvent}</strong><p class="sub">Event ordering for ${student.name}</p></button>
         </div>
         <div class="panel mint">
-          <h3>Active order</h3>
-          <p class="sub">Lunch order for ${appState.student} is scheduled for Friday, 1st Break.</p>
+          <h3>${student.name}'s current context</h3>
+          <p class="sub">${student.orderNote}</p>
         </div>
       `;
     }
 
     function menu() {
+      const student = currentStudent();
       return `
-        ${top("Canteen Menu", `${appState.student} - ${appState.school}`)}
-        <div class="line"><span>Date</span><strong>Friday, 3 July</strong></div>
-        <div class="line"><span>Break</span><strong>1st Break</strong></div>
-        <h2>Favourites</h2>
+        ${top("Canteen Menu", `${student.name} - ${student.school}`)}
+        ${contextPills()}
+        <div class="line highlight"><span>Date</span><strong>${student.date}</strong></div>
+        <div class="line"><span>Break</span><strong>${student.breakName}</strong></div>
+        <h2>${student.name}'s favourites</h2>
         <div class="panel">
-          ${product("Chicken Wrap", "$8.50", "Homemade", "Popular")}
-          ${product("Apple Juice", "$3.00", "Gluten-free", "Cold")}
-          ${product("Banana Bread", "$3.00", "Vegetarian", "New")}
+          ${student.menu.map(product).join("")}
         </div>
-        <button class="primary" data-go="cart">View Cart ${appState.cartTotal}</button>
+        <button class="primary" data-go="cart">View Cart ${money(student.cartTotal)}</button>
       `;
     }
 
-    function product(name, price, tagA, tagB) {
+    function product(item) {
       return `
         <div class="product">
-          <span class="food-img"></span>
+          <span class="food-img ${item.tone || ""}"></span>
           <span>
-            <h3>${name}</h3>
-            <span class="tags"><span class="tag">${tagA}</span><span class="tag">${tagB}</span></span>
+            <h3>${item.name}</h3>
+            <span class="tags">${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}</span>
           </span>
-          <span class="price">${price}</span>
+          <span class="price">${money(item.price)}</span>
         </div>
       `;
     }
 
     function cart() {
+      const student = currentStudent();
       return `
-        ${top("Checkout", `${appState.student} - ${appState.school}`)}
+        ${top("Checkout", `${student.name} - ${student.school}`)}
+        ${contextPills()}
         <div class="panel">
-          ${product("Chicken Wrap", "$8.50", "Homemade", "1 item")}
-          ${product("Apple Juice", "$3.00", "Cold", "1 item")}
-          ${product("Banana Bread", "$3.00", "New", "1 item")}
+          ${student.menu.map((item) => product({ ...item, tags: ["1 item", ...item.tags.slice(0, 1)] })).join("")}
         </div>
         <h2>Payment source</h2>
-        <div class="line"><span>My Balance</span><strong>$85.50</strong></div>
-        <div class="line"><span>${appState.student}'s Wallet</span><strong>${appState.wallet}</strong></div>
-        <div class="line"><span>Total</span><strong>${appState.cartTotal}</strong></div>
+        <div class="line"><span>My Balance</span><strong>${money(student.accountBalance)}</strong></div>
+        <div class="line highlight"><span>${student.name}'s Wallet</span><strong>${money(student.wallet)}</strong></div>
+        <div class="line"><span>Total</span><strong>${money(student.cartTotal)}</strong></div>
         <button class="primary" data-go="success">Place Order</button>
-        <button class="secondary" style="width:100%; margin-top:10px;" data-go="wallet">Top Up Wallet</button>
+        <button class="secondary" style="width:100%; margin-top:10px;" data-go="wallet">Review Wallet</button>
       `;
     }
 
     function wallet() {
+      const student = currentStudent();
       return `
-        ${top(`${appState.student}'s Wallet`, "Shared wallet visible to linked account holders.")}
+        ${top(`${student.name}'s Wallet`, "Shared wallet visible to linked account holders.")}
+        ${contextPills()}
         <div class="panel mint">
           <p class="sub">Current balance</p>
-          <h1>${appState.wallet}</h1>
-          <p class="sub">Daily limit: $15.00 - Break limit: $8.00</p>
+          <h1>${money(student.wallet)}</h1>
+          <p class="sub">${student.limit}</p>
         </div>
         <h2>Recent activity</h2>
-        <div class="line"><span>Dad topped up</span><strong>+$20.00</strong></div>
-        <div class="line"><span>Kiosk purchase</span><strong>-$9.50</strong></div>
-        <div class="line"><span>Mum topped up</span><strong>+$30.00</strong></div>
-        <button class="primary" data-go="topup">Top Up Wallet</button>
+        ${student.activity.map(([label, amount]) => `<div class="line"><span>${label}</span><strong>${amount}</strong></div>`).join("")}
+        <button class="primary" data-go="topup">Top Up ${student.name}'s Wallet</button>
       `;
     }
 
     function topup() {
+      const student = currentStudent();
+      const amounts = [10, 20, 50, 75];
       return `
-        ${top("Top Up Wallet", `Funds go to ${appState.student}'s wallet, not your personal balance.`)}
-        <div class="grid">
-          <button class="tile"><strong>$10</strong><p class="sub">Quick top-up</p></button>
-          <button class="tile"><strong>$20</strong><p class="sub">Quick top-up</p></button>
-          <button class="tile"><strong>$50</strong><p class="sub">Quick top-up</p></button>
-          <button class="tile"><strong>Custom</strong><p class="sub">Enter amount</p></button>
+        ${top("Top Up Wallet", `Funds go to ${student.name}'s wallet, not your personal balance.`)}
+        ${contextPills()}
+        <div class="amount-row">
+          ${amounts.map((amount) => `<button class="amount ${amount === appState.topupAmount ? "active" : ""}" data-amount="${amount}">$${amount}</button>`).join("")}
         </div>
         <div class="panel">
           <h3>Payment</h3>
           <p class="sub">Adyen card payment or saved payment method would be used here.</p>
         </div>
-        <button class="primary" data-go="walletSuccess">Confirm Top-Up</button>
+        <div class="line highlight"><span>Top-up amount</span><strong>${money(appState.topupAmount)}</strong></div>
+        <button class="primary" data-action="confirmTopup">Confirm Top-Up</button>
       `;
     }
 
     function profile() {
+      const student = currentStudent();
       return `
         ${top("Profile", "Parent/Guardian account")}
+        ${contextPills()}
         <div class="panel">
           <h3>Account Holder Balance</h3>
           <p class="sub">Private balance visible only to this account holder.</p>
-          <h1>$85.50</h1>
+          <h1>${money(student.accountBalance)}</h1>
         </div>
-        <div class="line"><span>Account details</span><button class="ghost">Edit</button></div>
-        <div class="line"><span>Linked students</span><button class="ghost" data-go="home">Manage</button></div>
-        <div class="line"><span>Notification settings</span><button class="ghost">Open</button></div>
-        <div class="line"><span>Vouchers</span><strong>2 active</strong></div>
+        <div class="line highlight"><span>Active student</span><strong>${student.name}</strong></div>
+        <div class="line"><span>School / class</span><strong>${student.school} - ${student.year}</strong></div>
+        <div class="line"><span>Student controls</span><strong>${student.profileNote}</strong></div>
+        <div class="line"><span>Vouchers</span><strong>${student.vouchers} active</strong></div>
       `;
     }
 
     function success() {
+      const student = currentStudent();
       return `
-        ${top("Order Confirmed", `${appState.student} - ${appState.school}`)}
+        ${top("Order Confirmed", `${student.name} - ${student.school}`)}
         <div class="panel mint">
           <h1>Success</h1>
-          <p class="sub">Reference S24-10394. Delivery Friday, 1st Break. Paid from My Balance.</p>
+          <p class="sub">Reference S24-${student.id === "hannah" ? "10394" : "20412"}. ${student.activeOrder} for ${student.date}, ${student.breakName}. Paid from My Balance.</p>
         </div>
         <button class="primary" data-go="home">Back To Home</button>
       `;
     }
 
     function walletSuccess() {
+      const student = currentStudent();
       return `
-        ${top("Wallet Updated", `${appState.student}'s wallet top-up is complete.`)}
+        ${top("Wallet Updated", `${student.name}'s wallet top-up is complete.`)}
         <div class="panel mint">
-          <h1>+$20.00</h1>
-          <p class="sub">The top-up has been added to the shared Student Wallet and recorded in the wallet ledger.</p>
+          <h1>+${money(appState.topupAmount)}</h1>
+          <p class="sub">${student.name}'s wallet is now ${money(student.wallet)}. The ledger has been updated for all linked account holders.</p>
         </div>
         <button class="primary" data-go="wallet">View Wallet</button>
       `;
     }
 
     function events() {
+      const student = currentStudent();
       return `
-        ${top("School Events", `${appState.school} events and special ordering.`)}
+        ${top("School Events", `${student.school} events and special ordering.`)}
+        ${contextPills()}
         <div class="panel">
-          <h3>Glow Night</h3>
-          <p class="sub">Friday 17 July - Glow sticks and fundraiser items available until 12 July.</p>
+          <h3>${student.nextEvent}</h3>
+          <p class="sub">${student.name}'s school event ordering is open. Items use the same cart and checkout rules as canteen ordering.</p>
           <button class="primary" data-go="cart">Order Event Items</button>
         </div>
       `;
@@ -589,29 +801,68 @@
 
     const screens = { home, menu, cart, wallet, topup, profile, success, walletSuccess, events };
 
+    function navGroup(view) {
+      if (["menu", "cart", "success", "events"].includes(view)) return "menu";
+      if (["wallet", "topup", "walletSuccess"].includes(view)) return "wallet";
+      if (view === "profile") return "profile";
+      return "home";
+    }
+
     function render(name) {
-      screenEl.innerHTML = screens[name] ? screens[name]() : home();
-      navButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.screen === name));
+      appState.view = screens[name] ? name : "home";
+      screenEl.innerHTML = screens[appState.view]();
+      const activeNav = navGroup(appState.view);
+      navButtons.forEach((btn) => btn.classList.toggle("active", btn.dataset.screen === activeNav));
+    }
+
+    function navigate(name) {
+      if (name !== appState.view) appState.history.push(appState.view);
+      render(name);
+    }
+
+    function goBack() {
+      const previous = appState.history.pop() || "home";
+      render(previous);
     }
 
     document.addEventListener("click", (event) => {
+      const backBtn = event.target.closest("[data-back]");
+      if (backBtn) {
+        goBack();
+        return;
+      }
+
       const studentBtn = event.target.closest("[data-student]");
       if (studentBtn) {
-        appState.student = studentBtn.dataset.student;
-        appState.school = studentBtn.dataset.school;
-        appState.wallet = studentBtn.dataset.wallet;
-        render("home");
+        appState.studentId = studentBtn.dataset.student;
+        render(appState.view);
+        return;
+      }
+
+      const amountBtn = event.target.closest("[data-amount]");
+      if (amountBtn) {
+        appState.topupAmount = Number(amountBtn.dataset.amount);
+        render(appState.view);
+        return;
+      }
+
+      const actionBtn = event.target.closest("[data-action]");
+      if (actionBtn && actionBtn.dataset.action === "confirmTopup") {
+        const student = currentStudent();
+        student.wallet += appState.topupAmount;
+        student.activity.unshift(["Wallet top-up", `+${money(appState.topupAmount)}`]);
+        navigate("walletSuccess");
         return;
       }
 
       const go = event.target.closest("[data-go]");
       if (go) {
-        render(go.dataset.go);
+        navigate(go.dataset.go);
         return;
       }
 
       const nav = event.target.closest("[data-screen]");
-      if (nav) render(nav.dataset.screen);
+      if (nav) navigate(nav.dataset.screen);
     });
 
     render("home");
