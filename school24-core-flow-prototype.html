@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>School24 Core Flow Prototype</title>
+  <style>
+    :root {
+      --green: #1f7a4d;
+      --green-dark: #155c39;
+      --mint: #e9f6ef;
+      --ink: #17221c;
+      --muted: #607268;
+      --line: #d7e5dc;
+      --warn: #b86b16;
+      --danger: #b44343;
+      --bg: #f7faf8;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    button {
+      font: inherit;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(340px, 440px) minmax(320px, 1fr);
+      gap: 28px;
+      padding: 28px;
+      align-items: start;
+    }
+
+    .phone {
+      width: min(100%, 410px);
+      min-height: 780px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: 0 24px 70px rgba(24, 59, 42, 0.14);
+      overflow: hidden;
+      position: sticky;
+      top: 24px;
+    }
+
+    .status {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      color: var(--muted);
+      font-size: 12px;
+      border-bottom: 1px solid #edf4ef;
+    }
+
+    .screen {
+      min-height: 680px;
+      padding: 20px 20px 92px;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-weight: 800;
+      color: var(--green-dark);
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: var(--green);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .pill {
+      border-radius: 999px;
+      background: var(--mint);
+      color: var(--green-dark);
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      font-size: 28px;
+      line-height: 1.1;
+      letter-spacing: 0;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 20px;
+      line-height: 1.2;
+      margin: 18px 0 10px;
+    }
+
+    h3 {
+      font-size: 15px;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .student-row {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .student {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      text-align: left;
+      background: #fbfdfb;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .student.active {
+      border-color: var(--green);
+      background: var(--mint);
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #d7eee1;
+      color: var(--green-dark);
+      font-weight: 800;
+    }
+
+    .balance {
+      font-weight: 800;
+      color: var(--green-dark);
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .tile, .panel, .line {
+      border: 1px solid var(--line);
+      background: var(--white);
+      border-radius: 16px;
+    }
+
+    .tile {
+      padding: 14px;
+      text-align: left;
+      min-height: 92px;
+    }
+
+    .tile strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+
+    .panel {
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .panel.mint {
+      background: var(--mint);
+      border-color: #c9e9d7;
+    }
+
+    .product {
+      display: grid;
+      grid-template-columns: 68px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eef4f0;
+    }
+
+    .product:last-child { border-bottom: 0; }
+
+    .food-img {
+      height: 58px;
+      width: 68px;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 28px 22px, #ffe5a8 0 12px, transparent 13px),
+        radial-gradient(circle at 42px 30px, #f08c43 0 11px, transparent 12px),
+        linear-gradient(135deg, #dff3e6, #fff4d6);
+      border: 1px solid #e8eedf;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: #eef8f2;
+      color: var(--green-dark);
+      border: 1px solid #d6ecdf;
+    }
+
+    .price {
+      color: var(--green-dark);
+      font-weight: 800;
+    }
+
+    .primary {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 14px;
+      background: var(--green);
+      color: white;
+      font-weight: 800;
+      margin-top: 16px;
+    }
+
+    .secondary {
+      min-height: 42px;
+      border-radius: 12px;
+      background: var(--mint);
+      color: var(--green-dark);
+      font-weight: 800;
+      padding: 0 12px;
+    }
+
+    .ghost {
+      background: transparent;
+      color: var(--green-dark);
+      font-weight: 800;
+      padding: 0;
+    }
+
+    .line {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px;
+      margin-top: 8px;
+      align-items: center;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 76px;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,0.96);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .nav-btn {
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .nav-btn.active { color: var(--green-dark); }
+
+    .notes {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .note-block {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .note-block h2 { margin-top: 0; }
+
+    .note-block ul {
+      margin: 10px 0 0 18px;
+      padding: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 860px) {
+      .shell {
+        grid-template-columns: 1fr;
+        padding: 14px;
+      }
+
+      .phone {
+        position: static;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="phone" aria-label="School24 mobile prototype">
+      <div class="status">
+        <span>9:41</span>
+        <span>School24</span>
+        <span>100%</span>
+      </div>
+      <div class="screen" id="screen"></div>
+      <nav class="bottom-nav" aria-label="Prototype navigation">
+        <button class="nav-btn active" data-screen="home">Home</button>
+        <button class="nav-btn" data-screen="menu">Orders</button>
+        <button class="nav-btn" data-screen="wallet">Wallet</button>
+        <button class="nav-btn" data-screen="profile">Profile</button>
+      </nav>
+    </section>
+
+    <aside class="notes">
+      <div class="note-block">
+        <h2>Prototype Scope</h2>
+        <p class="sub">This is a lightweight clickable prototype for the core School24 rebuild flow: multi-student dashboard, school-scoped canteen menu, cart/checkout, and Student Wallet top-up.</p>
+      </div>
+      <div class="note-block">
+        <h2>What It Proves</h2>
+        <ul>
+          <li>The selected student controls school, menu, wallet, and checkout context.</li>
+          <li>Parent balance and Student Wallet are separate payment sources.</li>
+          <li>Wallet top-up and order checkout are distinct flows.</li>
+          <li>Mobile navigation can support canteen, wallet, notifications/profile extensions.</li>
+        </ul>
+      </div>
+      <div class="note-block">
+        <h2>Known Limitation</h2>
+        <p class="sub">This is not a pixel-perfect Figma implementation. The private prototype template referenced in the archive was not available, so this standalone HTML file is used instead.</p>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const state = {
+      student: "Hannah",
+      school: "All Hallows'",
+      wallet: "$42.00",
+      cartTotal: "$14.50"
+    };
+
+    const screenEl = document.getElementById("screen");
+    const navButtons = Array.from(document.querySelectorAll(".nav-btn"));
+
+    function top(title, subtitle) {
+      return `
+        <div class="topline">
+          <div class="brand"><span class="mark">S24</span><span>School24</span></div>
+          <span class="pill">${state.school}</span>
+        </div>
+        <h1>${title}</h1>
+        <p class="sub">${subtitle}</p>
+      `;
+    }
+
+    function home() {
+      return `
+        ${top("Good morning, Yuliia", "Choose a student, place an order, or top up a wallet.")}
+        <div class="student-row">
+          <button class="student active" data-student="Hannah" data-school="All Hallows'" data-wallet="$42.00">
+            <span class="avatar">H</span>
+            <span><strong>Hannah</strong><br><span class="sub">All Hallows' - Year 11B</span></span>
+            <span class="balance">$42.00</span>
+          </button>
+          <button class="student" data-student="James" data-school="Brisbane Grammar" data-wallet="$18.40">
+            <span class="avatar">J</span>
+            <span><strong>James</strong><br><span class="sub">Brisbane Grammar - Year 9A</span></span>
+            <span class="balance">$18.40</span>
+          </button>
+        </div>
+        <div class="grid">
+          <button class="tile" data-go="menu"><span class="pill">Today</span><strong>Order Canteen</strong><p class="sub">Cut-off 8:30am</p></button>
+          <button class="tile" data-go="wallet"><span class="pill">Wallet</span><strong>Top Up</strong><p class="sub">${state.student}'s wallet</p></button>
+          <button class="tile" data-go="profile"><span class="pill">Profile</span><strong>Students</strong><p class="sub">Classes, ID card, bans</p></button>
+          <button class="tile" data-go="events"><span class="pill">School</span><strong>Events</strong><p class="sub">Glow Night orders open</p></button>
+        </div>
+        <div class="panel mint">
+          <h3>Active order</h3>
+          <p class="sub">Lunch order for ${state.student} is scheduled for Friday, 1st Break.</p>
+        </div>
+      `;
+    }
+
+    function menu() {
+      return `
+        ${top("Canteen Menu", `${state.student} - ${state.school}`)}
+        <div class="line"><span>Date</span><strong>Friday, 3 July</strong></div>
+        <div class="line"><span>Break</span><strong>1st Break</strong></div>
+        <h2>Favourites</h2>
+        <div class="panel">
+          ${product("Chicken Wrap", "$8.50", "Homemade", "Popular")}
+          ${product("Apple Juice", "$3.00", "Gluten-free", "Cold")}
+          ${product("Banana Bread", "$3.00", "Vegetarian", "New")}
+        </div>
+        <button class="primary" data-go="cart">View Cart ${state.cartTotal}</button>
+      `;
+    }
+
+    function product(name, price, tagA, tagB) {
+      return `
+        <div class="product">
+          <span class="food-img"></span>
+          <span>
+            <h3>${name}</h3>
+            <span class="tags"><span class="tag">${tagA}</span><span class="tag">${tagB}</span></span>
+          </span>
+          <span class="price">${price}</span>
+        </div>
+      `;
+    }
+
+    function cart() {
+      return `
+        ${top("Checkout", `${state.student} - ${state.school}`)}
+        <div class="panel">
+          ${product("Chicken Wrap", "$8.50", "Homemade", "1 item")}
+          ${product("Apple Juice", "$3.00", "Cold", "1 item")}
+          ${product("Banana Bread", "$3.00", "New", "1 item")}
+        </div>
+        <h2>Payment source</h2>
+        <div class="line"><span>My Balance</span><strong>$85.50</strong></div>
+        <div class="line"><span>${state.student}'s Wallet</span><strong>${state.wallet}</strong></div>
+        <div class="line"><span>Total</span><strong>${state.cartTotal}</strong></div>
+        <button class="primary" data-go="success">Place Order</button>
+        <button class="secondary" style="width:100%; margin-top:10px;" data-go="wallet">Top Up Wallet</button>
+      `;
+    }
+
+    function wallet() {
+      return `
+        ${top(`${state.student}'s Wallet`, "Shared wallet visible to linked account holders.")}
+        <div class="panel mint">
+          <p class="sub">Current balance</p>
+          <h1>${state.wallet}</h1>
+          <p class="sub">Daily limit: $15.00 - Break limit: $8.00</p>
+        </div>
+        <h2>Recent activity</h2>
+        <div class="line"><span>Dad topped up</span><strong>+$20.00</strong></div>
+        <div class="line"><span>Kiosk purchase</span><strong>-$9.50</strong></div>
+        <div class="line"><span>Mum topped up</span><strong>+$30.00</strong></div>
+        <button class="primary" data-go="topup">Top Up Wallet</button>
+      `;
+    }
+
+    function topup() {
+      return `
+        ${top("Top Up Wallet", `Funds go to ${state.student}'s wallet, not your personal balance.`)}
+        <div class="grid">
+          <button class="tile"><strong>$10</strong><p class="sub">Quick top-up</p></button>
+          <button class="tile"><strong>$20</strong><p class="sub">Quick top-up</p></button>
+          <button class="tile"><strong>$50</strong><p class="sub">Quick top-up</p></button>
+          <button class="tile"><strong>Custom</strong><p class="sub">Enter amount</p></button>
+        </div>
+        <div class="panel">
+          <h3>Payment</h3>
+          <p class="sub">Adyen card payment or saved payment method would be used here.</p>
+        </div>
+        <button class="primary" data-go="walletSuccess">Confirm Top-Up</button>
+      `;
+    }
+
+    function profile() {
+      return `
+        ${top("Profile", "Parent/Guardian account")}
+        <div class="panel">
+          <h3>Account Holder Balance</h3>
+          <p class="sub">Private balance visible only to this account holder.</p>
+          <h1>$85.50</h1>
+        </div>
+        <div class="line"><span>Account details</span><button class="ghost">Edit</button></div>
+        <div class="line"><span>Linked students</span><button class="ghost" data-go="home">Manage</button></div>
+        <div class="line"><span>Notification settings</span><button class="ghost">Open</button></div>
+        <div class="line"><span>Vouchers</span><strong>2 active</strong></div>
+      `;
+    }
+
+    function success() {
+      return `
+        ${top("Order Confirmed", `${state.student} - ${state.school}`)}
+        <div class="panel mint">
+          <h1>Success</h1>
+          <p class="sub">Reference S24-10394. Delivery Friday, 1st Break. Paid from My Balance.</p>
+        </div>
+        <button class="primary" data-go="home">Back To Home</button>
+      `;
+    }
+
+    function walletSuccess() {
+      return `
+        ${top("Wallet Updated", `${state.student}'s wallet top-up is complete.`)}
+        <div class="panel mint">
+          <h1>+$20.00</h1>
+          <p class="sub">The top-up has been added to the shared Student Wallet and recorded in the wallet ledger.</p>
+        </div>
+        <button class="primary" data-go="wallet">View Wallet</button>
+      `;
+    }
+
+    function events() {
+      return `
+        ${top("School Events", `${state.school} events and special ordering.`)}
+        <div class="panel">
+          <h3>Glow Night</h3>
+          <p class="sub">Friday 17 July - Glow sticks and fundraiser items available until 12 July.</p>
+          <button class="primary" data-go="cart">Order Event Items</button>
+        </div>
+      `;
+    }
+
+    const screens = { home, menu, cart, wallet, topup, profile, success, walletSuccess, events };
+
+    function render(name) {
+      screenEl.innerHTML = screens[name] ? screens[name]() : home();
+      navButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.screen === name));
+    }
+
+    document.addEventListener("click", (event) => {
+      const studentBtn = event.target.closest("[data-student]");
+      if (studentBtn) {
+        state.student = studentBtn.dataset.student;
+        state.school = studentBtn.dataset.school;
+        state.wallet = studentBtn.dataset.wallet;
+        render("home");
+        return;
+      }
+
+      const go = event.target.closest("[data-go]");
+      if (go) {
+        render(go.dataset.go);
+        return;
+      }
+
+      const nav = event.target.closest("[data-screen]");
+      if (nav) render(nav.dataset.screen);
+    });
+
+    render("home");
+  </script>
+</body>
+</html>
