@@ -351,7 +351,36 @@
         <span>School24</span>
         <span>100%</span>
       </div>
-      <div class="screen" id="screen"></div>
+      <div class="screen" id="screen">
+        <div class="topline">
+          <div class="brand"><span class="mark">S24</span><span>School24</span></div>
+          <span class="pill">All Hallows'</span>
+        </div>
+        <h1>Good morning, Yuliia</h1>
+        <p class="sub">Choose a student, place an order, or top up a wallet.</p>
+        <div class="student-row">
+          <button class="student active" data-student="Hannah" data-school="All Hallows'" data-wallet="$42.00">
+            <span class="avatar">H</span>
+            <span><strong>Hannah</strong><br><span class="sub">All Hallows' - Year 11B</span></span>
+            <span class="balance">$42.00</span>
+          </button>
+          <button class="student" data-student="James" data-school="Brisbane Grammar" data-wallet="$18.40">
+            <span class="avatar">J</span>
+            <span><strong>James</strong><br><span class="sub">Brisbane Grammar - Year 9A</span></span>
+            <span class="balance">$18.40</span>
+          </button>
+        </div>
+        <div class="grid">
+          <button class="tile" data-go="menu"><span class="pill">Today</span><strong>Order Canteen</strong><p class="sub">Cut-off 8:30am</p></button>
+          <button class="tile" data-go="wallet"><span class="pill">Wallet</span><strong>Top Up</strong><p class="sub">Hannah's wallet</p></button>
+          <button class="tile" data-go="profile"><span class="pill">Profile</span><strong>Students</strong><p class="sub">Classes, ID card, bans</p></button>
+          <button class="tile" data-go="events"><span class="pill">School</span><strong>Events</strong><p class="sub">Glow Night orders open</p></button>
+        </div>
+        <div class="panel mint">
+          <h3>Active order</h3>
+          <p class="sub">Lunch order for Hannah is scheduled for Friday, 1st Break.</p>
+        </div>
+      </div>
       <nav class="bottom-nav" aria-label="Prototype navigation">
         <button class="nav-btn active" data-screen="home">Home</button>
         <button class="nav-btn" data-screen="menu">Orders</button>
@@ -382,7 +411,8 @@
   </main>
 
   <script>
-    const state = {
+    (() => {
+    const appState = {
       student: "Hannah",
       school: "All Hallows'",
       wallet: "$42.00",
@@ -396,7 +426,7 @@
       return `
         <div class="topline">
           <div class="brand"><span class="mark">S24</span><span>School24</span></div>
-          <span class="pill">${state.school}</span>
+          <span class="pill">${appState.school}</span>
         </div>
         <h1>${title}</h1>
         <p class="sub">${subtitle}</p>
@@ -420,20 +450,20 @@
         </div>
         <div class="grid">
           <button class="tile" data-go="menu"><span class="pill">Today</span><strong>Order Canteen</strong><p class="sub">Cut-off 8:30am</p></button>
-          <button class="tile" data-go="wallet"><span class="pill">Wallet</span><strong>Top Up</strong><p class="sub">${state.student}'s wallet</p></button>
+          <button class="tile" data-go="wallet"><span class="pill">Wallet</span><strong>Top Up</strong><p class="sub">${appState.student}'s wallet</p></button>
           <button class="tile" data-go="profile"><span class="pill">Profile</span><strong>Students</strong><p class="sub">Classes, ID card, bans</p></button>
           <button class="tile" data-go="events"><span class="pill">School</span><strong>Events</strong><p class="sub">Glow Night orders open</p></button>
         </div>
         <div class="panel mint">
           <h3>Active order</h3>
-          <p class="sub">Lunch order for ${state.student} is scheduled for Friday, 1st Break.</p>
+          <p class="sub">Lunch order for ${appState.student} is scheduled for Friday, 1st Break.</p>
         </div>
       `;
     }
 
     function menu() {
       return `
-        ${top("Canteen Menu", `${state.student} - ${state.school}`)}
+        ${top("Canteen Menu", `${appState.student} - ${appState.school}`)}
         <div class="line"><span>Date</span><strong>Friday, 3 July</strong></div>
         <div class="line"><span>Break</span><strong>1st Break</strong></div>
         <h2>Favourites</h2>
@@ -442,7 +472,7 @@
           ${product("Apple Juice", "$3.00", "Gluten-free", "Cold")}
           ${product("Banana Bread", "$3.00", "Vegetarian", "New")}
         </div>
-        <button class="primary" data-go="cart">View Cart ${state.cartTotal}</button>
+        <button class="primary" data-go="cart">View Cart ${appState.cartTotal}</button>
       `;
     }
 
@@ -461,7 +491,7 @@
 
     function cart() {
       return `
-        ${top("Checkout", `${state.student} - ${state.school}`)}
+        ${top("Checkout", `${appState.student} - ${appState.school}`)}
         <div class="panel">
           ${product("Chicken Wrap", "$8.50", "Homemade", "1 item")}
           ${product("Apple Juice", "$3.00", "Cold", "1 item")}
@@ -469,8 +499,8 @@
         </div>
         <h2>Payment source</h2>
         <div class="line"><span>My Balance</span><strong>$85.50</strong></div>
-        <div class="line"><span>${state.student}'s Wallet</span><strong>${state.wallet}</strong></div>
-        <div class="line"><span>Total</span><strong>${state.cartTotal}</strong></div>
+        <div class="line"><span>${appState.student}'s Wallet</span><strong>${appState.wallet}</strong></div>
+        <div class="line"><span>Total</span><strong>${appState.cartTotal}</strong></div>
         <button class="primary" data-go="success">Place Order</button>
         <button class="secondary" style="width:100%; margin-top:10px;" data-go="wallet">Top Up Wallet</button>
       `;
@@ -478,10 +508,10 @@
 
     function wallet() {
       return `
-        ${top(`${state.student}'s Wallet`, "Shared wallet visible to linked account holders.")}
+        ${top(`${appState.student}'s Wallet`, "Shared wallet visible to linked account holders.")}
         <div class="panel mint">
           <p class="sub">Current balance</p>
-          <h1>${state.wallet}</h1>
+          <h1>${appState.wallet}</h1>
           <p class="sub">Daily limit: $15.00 - Break limit: $8.00</p>
         </div>
         <h2>Recent activity</h2>
@@ -494,7 +524,7 @@
 
     function topup() {
       return `
-        ${top("Top Up Wallet", `Funds go to ${state.student}'s wallet, not your personal balance.`)}
+        ${top("Top Up Wallet", `Funds go to ${appState.student}'s wallet, not your personal balance.`)}
         <div class="grid">
           <button class="tile"><strong>$10</strong><p class="sub">Quick top-up</p></button>
           <button class="tile"><strong>$20</strong><p class="sub">Quick top-up</p></button>
@@ -526,7 +556,7 @@
 
     function success() {
       return `
-        ${top("Order Confirmed", `${state.student} - ${state.school}`)}
+        ${top("Order Confirmed", `${appState.student} - ${appState.school}`)}
         <div class="panel mint">
           <h1>Success</h1>
           <p class="sub">Reference S24-10394. Delivery Friday, 1st Break. Paid from My Balance.</p>
@@ -537,7 +567,7 @@
 
     function walletSuccess() {
       return `
-        ${top("Wallet Updated", `${state.student}'s wallet top-up is complete.`)}
+        ${top("Wallet Updated", `${appState.student}'s wallet top-up is complete.`)}
         <div class="panel mint">
           <h1>+$20.00</h1>
           <p class="sub">The top-up has been added to the shared Student Wallet and recorded in the wallet ledger.</p>
@@ -548,7 +578,7 @@
 
     function events() {
       return `
-        ${top("School Events", `${state.school} events and special ordering.`)}
+        ${top("School Events", `${appState.school} events and special ordering.`)}
         <div class="panel">
           <h3>Glow Night</h3>
           <p class="sub">Friday 17 July - Glow sticks and fundraiser items available until 12 July.</p>
@@ -567,9 +597,9 @@
     document.addEventListener("click", (event) => {
       const studentBtn = event.target.closest("[data-student]");
       if (studentBtn) {
-        state.student = studentBtn.dataset.student;
-        state.school = studentBtn.dataset.school;
-        state.wallet = studentBtn.dataset.wallet;
+        appState.student = studentBtn.dataset.student;
+        appState.school = studentBtn.dataset.school;
+        appState.wallet = studentBtn.dataset.wallet;
         render("home");
         return;
       }
@@ -585,6 +615,7 @@
     });
 
     render("home");
+    })();
   </script>
 </body>
 </html>
